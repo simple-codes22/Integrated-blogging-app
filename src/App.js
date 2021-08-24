@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { createTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+import AuthProvider from "./Components/Contexts/authContext";
+import Footer from "./Components/Navigations/Footer";
+import Navigation from "./Components/Navigations/Navigation";
+
+const useTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#58ec53',
+    },
+    secondary: {
+      main: '#fffffff2'
+    }
+  },
+  typography: {
+    fontFamily: 'Noto Sans JP, sans-serif;',
+  }
+})
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <ThemeProvider theme={useTheme}>
+        <Navigation />
+        <Footer />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
