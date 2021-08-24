@@ -1,6 +1,6 @@
-import { Box, makeStyles, } from '@material-ui/core';
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import { GitHub, Facebook, Twitter, Telegram } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
 
 const footerStyle = makeStyles(theme => ({
     root: {
@@ -8,10 +8,27 @@ const footerStyle = makeStyles(theme => ({
         bottom: '0',
         left:'0',
         right: '0',
-        height: '80px',
+        height: '130px',
+        background: '#080808f0',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        flexDirection: 'column'
     },
-    navigationBox: {
-
+    current: {
+        fontSize: '.83rem',
+        color: '#ffffff92'
+    },
+    iconNavs: {
+        '& svg': {
+            fill: '#ffffff61',
+            margin: '10px',
+            cursor: 'pointer',
+        },
+        '& svg:hover': {
+            fill: '#ffffffd5'
+        }
     }
 }))
 
@@ -19,10 +36,14 @@ const Footer = () => {
     /* Footer component for all paged */
     const useStyle = footerStyle(); // Declaration of the footer styles.
     return (
-        <Box container component='footer' className={useStyle.root}>
-            <Box container component='div' className={useStyle.navigationBox}>
-                Helloworld
+        <Box container component='footer'  className={useStyle.root}>
+            <Box container component='div' className={useStyle.iconNavs}>
+                <a href="https://github.com/simple-codes22"><GitHub /></a>
+                <a href="https://facebook.com/"><Facebook /></a>
+                <a href="https://twitter.com/"><Twitter /></a>
+                <a href="https://telegram.com/"><Telegram /></a>
             </Box>
+            <Box component='div' className={useStyle.current}>@2021</Box>
         </Box>
     )
 }
