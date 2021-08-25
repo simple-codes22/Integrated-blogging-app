@@ -4,11 +4,11 @@ import { BrowserRouter, Link } from 'react-router-dom';
 
 const footerStyle = makeStyles(theme => ({
     root: {
-        position: 'absolute',
+        position: 'relative',
         bottom: '0',
         left:'0',
         right: '0',
-        height: '130px',
+        height: '150px',
         background: '#080808f0',
         display: 'flex',
         justifyContent: 'center',
@@ -36,7 +36,7 @@ const Footer = () => {
     /* Footer component for all paged */
     const useStyle = footerStyle(); // Declaration of the footer styles.
     return (
-        <Box container component='footer'  className={useStyle.root}>
+        <Box container component='footer'  className={`footer ${useStyle.root}`}>
             <Box container component='div' className={useStyle.iconNavs}>
                 <a href="https://github.com/simple-codes22"><GitHub /></a>
                 <a href="https://facebook.com/"><Facebook /></a>

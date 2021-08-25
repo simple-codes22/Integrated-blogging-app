@@ -7,7 +7,9 @@ const HomeStyles = makeStyles(theme => ({
     root: {
         display: "flex",
         justifyContent: 'center',
-        alignItems: 'center',
+        position: "relative",
+        minHeight: '100vh',
+        // alignItems: 'center',
     },
     Posts: {
         width: '600px',

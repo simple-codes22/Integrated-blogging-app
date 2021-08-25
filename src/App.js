@@ -1,7 +1,6 @@
 import { createTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import AuthProvider from "./Components/Contexts/authContext";
-import Footer from "./Components/Navigations/Footer";
 import Navigation from "./Components/Navigations/Navigation";
 
 const useTheme = createTheme({
@@ -23,7 +22,6 @@ function App() {
     <AuthProvider>
       <ThemeProvider theme={useTheme}>
         <Navigation />
-        <Footer />
       </ThemeProvider>
     </AuthProvider>
   );

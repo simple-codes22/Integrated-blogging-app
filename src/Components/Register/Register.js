@@ -6,11 +6,15 @@ import { Link } from "react-router-dom";
 
 
 const formStyle = makeStyles(theme =>({
+    main: {
+        position:'relative',
+        minHeight: '100vh',
+    },
     formBase: {
         display: "flex",
         position: 'absolute',
         justifyContent: 'center',
-        height: '100vh',
+        height: '100%',
         alignItems: 'center',
         width:'100%',
         trasition: 'all .5s ease-in-out'
@@ -115,13 +119,14 @@ const Form = () => {
 }
 
 const Register = () => {
+    const useStyle = formStyle();
     useEffect(() => {
         document.title = 'Blogging App | Sign-Up';
     });
     return (
-        <>
+        <Box component='section' className={useStyle.main}>
             <Form />
-        </>
+        </Box>
     )
 }
 
