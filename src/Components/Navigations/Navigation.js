@@ -7,6 +7,7 @@ import Register from '../Register/Register';
 import Home from '../Home/Home';
 import Dashboard from '../Dashboard/Dashboard';
 import Footer from "./Footer";
+import ViewPost from "../Home/viewPost";
 
 const navStyle = makeStyles(theme => ({ // Total navigation Styling
     root: {
@@ -85,6 +86,7 @@ const Navigation = () => {
                 <Route path='/login'><Login /><Footer /></Route>
                 <Route path='/register'><Register /><Footer /></Route>
                 <Route path='/dashboard'><Dashboard /><Footer /></Route>
+                <Route path='/article/:id' container="true"><ViewPost /><Footer /></Route>
             </Switch>
         </Router>
     )
