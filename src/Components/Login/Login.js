@@ -9,7 +9,7 @@ const Form = () => {
     const useTheme = formStyle();
     const [LogDetails, updateLog] = useState({eMail: ''});
     async function signIn() {
-        const { content } = await supabase.auth.signUp({
+        const { content } = await supabase.auth.signIn({
             email: LogDetails.eMail,
         });
         return console.log(content);

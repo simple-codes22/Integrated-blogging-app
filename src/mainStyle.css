@@ -6,3 +6,18 @@ html {
     scroll-behavior: smooth;
     height:100%;
 }
+.loaded {
+    animation: loaded .5s ease;
+}
+.loading {
+    animation: loading 2s ease-in;
+}
+@keyframes loaded {
+    from {opacity:0};
+    to {opacity:1};
+}
+@keyframes loading {
+    0% {opacity:0; font-size: small;}
+    5% {opacity:.4;}
+    50% {font-size: medium; opacity: 1;}
+}

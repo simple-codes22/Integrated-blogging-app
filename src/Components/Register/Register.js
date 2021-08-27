@@ -86,7 +86,7 @@ const Form = () => {
     const useTheme = formStyle();
     const [regDetails, updateReg] = useState({eMail: ''});
     async function signUp() {
-        const { content } = await supabase.auth.signUp({
+        const { content } = await supabase.auth.signIn({
             email: regDetails.eMail,
         });
         return console.log(content);
