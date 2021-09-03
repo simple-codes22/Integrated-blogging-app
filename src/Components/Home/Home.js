@@ -1,5 +1,4 @@
 import { makeStyles, Box, Card, CardActionArea, CardActions, CardContent, CardHeader, Avatar, Button, CircularProgress, Typography } from "@material-ui/core";
-import { update } from "lodash";
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import supabase from '../Backend/supaBaseClient';
@@ -55,7 +54,7 @@ const Home = (props) => {
     /* HomePage Component */
     const [posts, updatePosts] = useState([]) // Posts Hook
     const useStyle = HomeStyles();
-    console.log("User details: " + supabase.auth.user());
+    console.log(supabase.auth.user());
     useEffect(() => {
         document.title = 'Blogging App | Home';
         getPosts();
@@ -88,7 +87,6 @@ const Home = (props) => {
                         <Typography>Failed to load articles</Typography>
                         <Button onClick={getPosts} variant='outlined'>Retry</Button>
                     </Box>
-
                 )
             } else {
                 return (
