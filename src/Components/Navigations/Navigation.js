@@ -89,9 +89,13 @@ const Navigation = () => {
     const IfAuthenticated = () => {
         if (supabase.auth.user()) {
             setAuth(supabase.auth.user());
-            getDetails(checkAuth['id']);
-            return setTimeout(checkReady, 2000);
-
+            console.log(checkAuth)
+            // getDetails(checkAuth['id']);
+            // return setTimeout(checkReady, 2000);
+            return (
+                <>
+                </>
+            )
         } else {
             return (
                 <>
@@ -108,7 +112,7 @@ const Navigation = () => {
                     <Link to='/' className={useStyle.blogLogo}>Blog</Link>
                     <Box component='div' className={useStyle.blogList}>
                         {/* {checkAuth !== null ? <AuthBar />: <NotAuthBar />} */}
-                        {/* <IfAuthenticated /> */}
+                        <IfAuthenticated />
                     </Box>
                 </Toolbar>
             </AppBar>

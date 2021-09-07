@@ -94,7 +94,6 @@ const Home = (props) => {
                     {posts.map(elem => {
                         return (
                             <Card key={elem.id} className={useStyle.cards}>
-                                <Link to='/dashboard'>Dashboard</Link>
                                 <CardHeader 
                                     title={elem.title} 
                                     subheader={`By ${elem.blogger_profiles.username}`}

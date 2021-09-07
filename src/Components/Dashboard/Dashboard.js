@@ -1,10 +1,16 @@
-import React, { Component } from 'react';
+import React, {useEffect, useState, useContext } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// import { useState } from "react";
-import { Box, makeStyles, Avatar, Button, IconButton, Typography } from '@material-ui/core';
+import supabase from  '../Backend/supaBaseClient';
+import { Box, makeStyles, Avatar, Button, IconButton, Typography, TextField } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
+import { AuthContext } from '../Contexts/authContext';
 
+/* 
+    What's remaining?
+        - Make the Post Article Button active.
+        - Get recent Posts.
+*/  
 const dashStyle = makeStyles(themes => ({
     root: {
         position: 'relative',
@@ -17,7 +23,7 @@ const dashStyle = makeStyles(themes => ({
         width: '100%',
     },
     newSection: {
-        width: "800px",
+        width: '80%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -26,40 +32,121 @@ const dashStyle = makeStyles(themes => ({
     },
     prevPost: {
         margin: "20px",
+        width: '80%',
         display: 'flex',
-        justifyContent: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // flexDirection: 'column',
+    },
+    recentTitle: {
+        justifySelf: 'flex-start',
+        fontSize: '1.74rem',
+    },
+    textField: {
+        width: '600px',
+        margin: '10px',
+    },
+    textDiv: {
+        display: 'flex',
         alignItems: 'center',
-        flexDirection: 'column',
+        margin: '25px',
     }
 }));
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     /* What the dashboard should contain for authenticated users (bloggers):
         Link to Create Posts.
         Lists for posts the user has created (with CRUD functions available for the users).
     */
-   const useStyle = dashStyle();
+    useEffect(() => {
+        document.title = 'Blogging App | DashBoard';
+        // getPosts();
+    }, [props.id]);
+
+    const [user, setUser] = useContext(AuthContext); // Gets the authenticated user information globally
+    const [userArticles, updateArticles] = useState([]); // Shows the list of articles posted by user
+    const [postingData, changeData] = useState(""); // The current article user wants to post. This will be updated based on change from the user's Article editor
+    const [infoState, changeState] = useState('Undecided'); // Shows the state if the user's article was posted successfully or not
+
+    const useStyle = dashStyle();
+    
+    const getPosts = async () => {
+        if (user.id !== null) {
+            try {
+                const response = await supabase.from('posts')
+                    .select('*')
+                    .is('posted_by', user.id)
+                    .range(0, 8); // Queries the posts and the author (foreign key)
+                return updateArticles(response.data);
+            } catch (err) {
+                return updateArticles({'state': 'failed'});
+            }
+        } else {
+            return
+        }
+    }
+    const sendPosts = async () => {
+        if (user.id) {
+            try {
+                const info = await supabase.from('posts')
+                .insert([
+                    { title: 'someValue', post_content: 'otherValue', posted_by: user.id },
+                ]);
+                return changeState('Success');
+            }
+            catch(err) {
+                return changeState('Failed');
+            }
+        }
+    }
+
+    const ArticleShow = () => {
+        return (
+            <>
+            </>
+        )
+    }
+
     return (
         <Box className={useStyle.root}>
-            <Box component='section' style={{borderBottom: '1px solid #00000026'}} className={useStyle.newSection}>
+            <Box component='section' className={useStyle.newSection}>
                 <Box className={useStyle.newPostEditor}>
-                    <Typography variant='h3' style={{borderBottom: '1px solid #00000026', margin: '30px', padding: '10px'}}>Create a new Post</Typography>
-                    <CKEditor
-                        editor={ ClassicEditor }
-                        onReady={ editor => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log( 'Editor is ready to use!', editor );
-                        } }
-                        onChange={ ( event, editor ) => {
-                            const data = editor.getData();
-                            console.log(data);
-                        } }
-                    />
+                    <Typography variant='h4' style={{borderBottom: '1px solid #00000026', margin: '30px', padding: '10px', width:'80%'}}>Create a new Post</Typography>
+                    <Box container component='div' className={useStyle.textDiv}>
+                        <Typography component='label'style={{
+                            margin: '10px',
+                            fontSize: '1.4rem',
+                        }}>Title: </Typography>
+                        <TextField variant='outlined' className={useStyle.textField} label='Required*' />
+                    </Box>
+                    <Box container component='div' className={useStyle.textDiv} style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                        <Typography component='label' style={{
+                            margin: '10px',
+                            fontSize: '1.4rem',
+                        }}>Content: </Typography>
+                        <Box container component='section' style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}>
+                            <Box item component='div' style={{width: "90%"}}>
+                                <CKEditor
+                                    editor={ ClassicEditor }
+                                    onChange={ ( event, editor ) => {
+                                        changeData(editor.getData());
+                                    } }
+                                />
+                            </Box>
+                        </Box>
+                    </Box>
                 </Box>
-                <Button style={{margin: '20px'}} endIcon={<SendIcon />} variant='contained' color='primary'>Post Article</Button>
+                    <Button style={{margin: '20px'}} endIcon={<SendIcon />} variant='contained' color='primary'
+                        // onClick={}
+                    >Post Article</Button>
             </Box>
             <Box component='section' className={useStyle.prevPost}>
-                <Typography variant='h4' style={{justifySelf: 'flex-start'}}>Your Recent Articles Posted</Typography>
+                <Typography variant='h4' className={useStyle.recentTitle} style={{borderBottom: '1px solid #00000026', margin: '30px', padding: '10px', width:'80%'}}>Your Recent Articles Posted</Typography>
+                <ArticleShow />
             </Box>
         </Box>
     );
