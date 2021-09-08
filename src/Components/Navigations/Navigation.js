@@ -1,5 +1,5 @@
 import { makeStyles, Button, Toolbar, AppBar, Avatar, Box } from "@material-ui/core"; // File Components from Material UI core
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../Contexts/authContext";
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import Login from "../Login/Login";
@@ -43,9 +43,20 @@ const navStyle = makeStyles(theme => ({ // Total navigation Styling
 }))
 
 
-const Navigation = () => {
+const Navigation = (props) => {
     /* Main Navigation component which will be updated if user is authenticated or not */
     const useStyle = navStyle();
+    
+    /* useEffect hook 👇👇 to change auth-nav-bar based on the auth query */
+    useEffect(() => {
+        if (supabase.auth.user()) {
+            getDetails(supabase.auth.user());
+            IfAuthenticated();
+        } else {
+            IfAuthenticated();
+        }
+
+    }, [props.id])
 
     const [checkAuth, setAuth] = useContext(AuthContext); // Gets the user info from the Auth Context
     const [userDetails, setDetails] = useState([]);
@@ -64,47 +75,41 @@ const Navigation = () => {
         // This is rendered when the user is authenticated
         return (
             <>
-                <Link to='/dashboard'><Avatar children={userDetails['username'].split('')[0]} /></Link>
+                {/* <Link to='/dashboard'><Avatar children={userDetails['username'].split('')[0]} /></Link> */}
                 <Link to='/' className={useStyle.mainLinks}><Button variant='text'>Log-Out</Button></Link>
             </>
         )
     }
+
     const getDetails = async (user_id) => {
-        
-        const data = await supabase
-        .from('blogger_profiles')
-        .select("*")
-        .is('id', user_id);
-        return setDetails(data.data);
+        try {
+            const data = await supabase
+            .from('blogger_profiles')
+            .select("*")
+            .is('id', user_id);
+            return setDetails(data.data);
+        }
+        catch(error) {
+            return setDetails('Error');
+        }
     }
-
-    const checkReady = () => {
-        return (
-            <>
-                <AuthBar />
-            </>
-        )
-    }
-
     const IfAuthenticated = () => {
-        if (supabase.auth.user()) {
-            setAuth(supabase.auth.user());
-            console.log(checkAuth)
-            // getDetails(checkAuth['id']);
-            // return setTimeout(checkReady, 2000);
-            return (
-                <>
-                </>
-            )
-        } else {
+        if (userDetails === 'Error') {
             return (
                 <>
                     <NotAuthBar />
                 </>
             )
+        } else {
+            return (
+                <>
+                    <AuthBar />
+                </>
+            )
         }
     }
-    
+
+
     return (
         <Router>
             <AppBar position='static' className={useStyle.root} variant='outlined'>
@@ -112,7 +117,7 @@ const Navigation = () => {
                     <Link to='/' className={useStyle.blogLogo}>Blog</Link>
                     <Box component='div' className={useStyle.blogList}>
                         {/* {checkAuth !== null ? <AuthBar />: <NotAuthBar />} */}
-                        <IfAuthenticated />
+                        {/* <IfAuthenticated /> */}
                     </Box>
                 </Toolbar>
             </AppBar>
