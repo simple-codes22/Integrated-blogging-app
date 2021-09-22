@@ -16,10 +16,17 @@ const HomeStyles = makeStyles(theme => ({
     },
     Posts: {
         width: '600px',
+        [theme.breakpoints.down("620")]: {
+            width: '70vw',
+        }
     },
     cards: {
         margin: "10px",
-        cursor: "pointer"
+        cursor: "auto",
+        [theme.breakpoints.down('620')]: {
+            width: '70vw',
+            margin: '13px',
+        }
     },
     cardTitle: {},
     cardAction:{
@@ -33,7 +40,8 @@ const HomeStyles = makeStyles(theme => ({
     cardContent: {
         color: '#000000b2',
         fontSize: '14px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+
     },
     avatar: {
         backgroundColor: '#ec7676',
