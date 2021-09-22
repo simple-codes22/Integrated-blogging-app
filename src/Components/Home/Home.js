@@ -19,7 +19,7 @@ const HomeStyles = makeStyles(theme => ({
     },
     cards: {
         margin: "10px",
-        cursor: "auto"
+        cursor: "pointer"
     },
     cardTitle: {},
     cardAction:{
@@ -54,7 +54,7 @@ const Home = (props) => {
     /* HomePage Component */
     const [posts, updatePosts] = useState([]) // Posts Hook
     const useStyle = HomeStyles();
-    console.log(supabase.auth.user());
+    // console.log('Home: ', supabase.auth.user());
     useEffect(() => {
         document.title = 'Blogging App | Home';
         getPosts();
@@ -80,6 +80,7 @@ const Home = (props) => {
     }
 
     const ShowMain = () => {
+        console.log(supabase.auth.user());
         if (posts.length !== 0) {
             if (posts.state === 'failed') {
                 return (

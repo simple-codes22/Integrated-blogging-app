@@ -48,15 +48,15 @@ const Navigation = (props) => {
     const useStyle = navStyle();
     
     /* useEffect hook 👇👇 to change auth-nav-bar based on the auth query */
-    useEffect(() => {
-        if (supabase.auth.user()) {
-            getDetails(supabase.auth.user());
-            IfAuthenticated();
-        } else {
-            IfAuthenticated();
-        }
+    // useEffect(() => {
+    //     if (supabase.auth.user()) {
+    //         getDetails(supabase.auth.user());
+    //         IfAuthenticated();
+    //     } else {
+    //         IfAuthenticated();
+    //     }
 
-    }, [props.id])
+    // }, [props.id])
 
     const [checkAuth, setAuth] = useContext(AuthContext); // Gets the user info from the Auth Context
     const [userDetails, setDetails] = useState([]);
@@ -76,23 +76,12 @@ const Navigation = (props) => {
         return (
             <>
                 {/* <Link to='/dashboard'><Avatar children={userDetails['username'].split('')[0]} /></Link> */}
+                <Link to='/dashboard'><Avatar>S</Avatar></Link>
                 <Link to='/' className={useStyle.mainLinks}><Button variant='text'>Log-Out</Button></Link>
             </>
         )
     }
 
-    const getDetails = async (user_id) => {
-        try {
-            const data = await supabase
-            .from('blogger_profiles')
-            .select("*")
-            .is('id', user_id);
-            return setDetails(data.data);
-        }
-        catch(error) {
-            return setDetails('Error');
-        }
-    }
     const IfAuthenticated = () => {
         if (userDetails === 'Error') {
             return (
@@ -118,6 +107,7 @@ const Navigation = (props) => {
                     <Box component='div' className={useStyle.blogList}>
                         {/* {checkAuth !== null ? <AuthBar />: <NotAuthBar />} */}
                         {/* <IfAuthenticated /> */}
+                        <NotAuthBar />
                     </Box>
                 </Toolbar>
             </AppBar>

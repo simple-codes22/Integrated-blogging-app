@@ -31,6 +31,9 @@ const viewPostStyle = makeStyles(themes => ({
     },
     articleTitle: {
         fontSize: '1.56rem',
+        [themes.breakpoints.down('280px')]: {
+            fontSize: '1.4rem'
+        }
     },
     avatar: {
         width: '65px',
