@@ -1,4 +1,5 @@
 import { makeStyles, Box, Card, CardActionArea, CardActions, CardContent, CardHeader, Avatar, Button, CircularProgress, Typography } from "@material-ui/core";
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import supabase from '../Backend/supaBaseClient';
@@ -16,6 +17,9 @@ const HomeStyles = makeStyles(theme => ({
     },
     Posts: {
         width: '600px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         [theme.breakpoints.down("620")]: {
             width: '70vw',
         }
@@ -23,6 +27,7 @@ const HomeStyles = makeStyles(theme => ({
     cards: {
         margin: "10px",
         cursor: "auto",
+        width: '600px',
         [theme.breakpoints.down('620')]: {
             width: '70vw',
             margin: '13px',
@@ -114,6 +119,16 @@ const Home = (props) => {
                             </Card>
                         )
                 })}
+                <Button endIcon={<ChevronRightIcon />} style={{
+                    margin: '10px',
+                    width: '80%',
+                    color: '#557be4',
+                    transition: 'all .5s ease-in-out'
+                }} onClick={() => {
+                    console.log('Another loaded post');
+                }}>
+                    See More Posts
+                </Button>
                 </Box>
                 )
             }

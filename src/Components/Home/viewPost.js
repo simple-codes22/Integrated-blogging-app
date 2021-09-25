@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Box, makeStyles, Typography, Backdrop, CircularProgress, Avatar } from '@material-ui/core';
+import { Box, makeStyles, Typography, Backdrop, CircularProgress, Avatar, ButtonGroup, Button } from '@material-ui/core';
 import supabase from "../Backend/supaBaseClient";
 
 
@@ -8,12 +8,13 @@ const viewPostStyle = makeStyles(themes => ({
     root: {
         position: 'relative',
         minHeight: '100vh',
-        margin: '10px',
+        margin: '30px',
     },
     articleRoot: {
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column'
     },
     articleMain: {
         width: '850px',
@@ -32,13 +33,23 @@ const viewPostStyle = makeStyles(themes => ({
     articleTitle: {
         fontSize: '1.56rem',
         [themes.breakpoints.down('315')]: {
-            fontSize: '1.2rem'
+            fontSize: '1.2rem',
         }
     },
     avatar: {
         width: '65px',
         height: '65px',
         marginRight: '20px',
+    },
+    toggleNextPrev: {
+        margin: '20px',
+        height: '35px',
+        '& button': {
+            width: '400px'
+        }
+    },
+    toggleButtons: {
+        color: '#557be4',
     }
 }))
 
@@ -108,8 +119,11 @@ const ViewPost = (props) => {
         <Box component='section' className={useStyle.root}>
             <Box component='div' className={useStyle.articleRoot}>
                 <CheckLoad />
+                <ButtonGroup className={useStyle.toggleNextPrev}>
+                    <Button className={useStyle.toggleButtons}>Previous Post</Button>
+                    <Button className={useStyle.toggleButtons}>Next Post</Button>
+                </ButtonGroup>
             </Box>
-
         </Box>
     )
 }

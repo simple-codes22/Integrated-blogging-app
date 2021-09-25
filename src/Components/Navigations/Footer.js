@@ -1,6 +1,6 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { GitHub, Facebook, Twitter, Telegram } from '@material-ui/icons';
-import { BrowserRouter, Link } from 'react-router-dom';
+// import { BrowserRouter, Link } from 'react-router-dom';
 
 const footerStyle = makeStyles(theme => ({
     root: {
@@ -18,7 +18,8 @@ const footerStyle = makeStyles(theme => ({
     },
     current: {
         fontSize: '.83rem',
-        color: '#ffffff92'
+        color: '#ffffff92',
+        cursor: 'default',
     },
     iconNavs: {
         '& svg': {
@@ -43,7 +44,7 @@ const Footer = () => {
                 <a href="https://twitter.com/"><Twitter /></a>
                 <a href="https://telegram.com/"><Telegram /></a>
             </Box>
-            <Box component='div' className={useStyle.current}>@2021</Box>
+            <Box component='div' title='Production Made In 2021' className={useStyle.current}>@2021</Box>
         </Box>
     )
 }
