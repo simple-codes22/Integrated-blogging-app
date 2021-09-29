@@ -10,6 +10,7 @@ import Footer from "./Footer";
 import ViewPost from "../Home/viewPost";
 import supabase from "../Backend/supaBaseClient";
 
+
 const navStyle = makeStyles(theme => ({ // Total navigation Styling
     root: {
         outline: "0",
@@ -35,10 +36,16 @@ const navStyle = makeStyles(theme => ({ // Total navigation Styling
     },
     mainLinks: {
         textDecoration: 'none',
+        margin: '5px',
         color: "black",
         '&:hover': {
             color: '#3f3f3f',
         }
+    },
+    AuthLinks: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 }))
 
@@ -48,15 +55,18 @@ const Navigation = (props) => {
     const useStyle = navStyle();
     
     /* useEffect hook 👇👇 to change auth-nav-bar based on the auth query */
-    // useEffect(() => {
-    //     if (supabase.auth.user()) {
-    //         getDetails(supabase.auth.user());
-    //         IfAuthenticated();
-    //     } else {
-    //         IfAuthenticated();
-    //     }
+    useEffect(() => {
+        if (supabase.auth.user() !== null) {
+            setAuth(supabase.auth.user());
+            console.log(checkAuth);
+            IfAuthenticated();
+        } else {
+            setDetails('Error');
+            console.log('Not still authenticated');
+            IfAuthenticated();
+        }
 
-    // }, [props.id])
+    }, [props.id])
 
     const [checkAuth, setAuth] = useContext(AuthContext); // Gets the user info from the Auth Context
     const [userDetails, setDetails] = useState([]);
@@ -74,11 +84,14 @@ const Navigation = (props) => {
     const AuthBar = () => {
         // This is rendered when the user is authenticated
         return (
-            <>
+            <Box className={useStyle.AuthLinks}>
                 {/* <Link to='/dashboard'><Avatar children={userDetails['username'].split('')[0]} /></Link> */}
-                <Link to='/dashboard'><Avatar>S</Avatar></Link>
-                <Link to='/' className={useStyle.mainLinks}><Button variant='text'>Log-Out</Button></Link>
-            </>
+                <Link to='/dashboard' className={useStyle.mainLinks}><Avatar>S</Avatar></Link>
+                <a href='/' onClick={async () => {
+                    await supabase.auth.signOut();
+                    return console.log('Logged Out');
+                }} className={useStyle.mainLinks}><Button variant='text'>Log-Out</Button></a>
+            </Box>
         )
     }
 
@@ -106,8 +119,7 @@ const Navigation = (props) => {
                     <Link to='/' className={useStyle.blogLogo}>Blog</Link>
                     <Box component='div' className={useStyle.blogList}>
                         {/* {checkAuth !== null ? <AuthBar />: <NotAuthBar />} */}
-                        {/* <IfAuthenticated /> */}
-                        <NotAuthBar />
+                        <IfAuthenticated />
                     </Box>
                 </Toolbar>
             </AppBar>

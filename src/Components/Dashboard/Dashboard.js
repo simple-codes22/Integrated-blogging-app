@@ -65,47 +65,55 @@ const Dashboard = (props) => {
 
     const [user, setUser] = useContext(AuthContext); // Gets the authenticated user information globally
     const [userArticles, updateArticles] = useState([]); // Shows the list of articles posted by user
-    const [postingData, changeData] = useState(""); // The current article user wants to post. This will be updated based on change from the user's Article editor
+    const [postingData, changeData] = useState({
+        title: '',
+        content: ""
+    }); // The current article user wants to post. This will be updated based on change from the user's Article editor
     const [infoState, changeState] = useState('Undecided'); // Shows the state if the user's article was posted successfully or not
 
     const useStyle = dashStyle();
     
-    const getPosts = async () => {
-        if (user.id !== null) {
-            try {
-                const response = await supabase.from('posts')
-                    .select('*')
-                    .is('posted_by', user.id)
-                    .range(0, 8); // Queries the posts and the author (foreign key)
-                return updateArticles(response.data);
-            } catch (err) {
-                return updateArticles({'state': 'failed'});
-            }
-        } else {
-            return
-        }
-    }
+    // const getPosts = async () => {
+    //     if (user.id !== null) {
+    //         try {
+    //             const response = await supabase.from('posts')
+    //                 .select('*')
+    //                 .is('posted_by', user.id)
+    //                 .range(0, 8); // Queries the posts and the author (foreign key)
+    //             return updateArticles(response.data);
+    //         } catch (err) {
+    //             return updateArticles({'state': 'failed'});
+    //         }
+    //     } else {
+    //         return
+    //     }
+    // }
+
     const sendPosts = async () => {
-        if (user.id) {
+        if (user !== null) {
             try {
-                const info = await supabase.from('posts')
+                await supabase.from('posts')
                 .insert([
-                    { title: 'someValue', post_content: 'otherValue', posted_by: user.id },
+                    { title: postingData.title, post_content: postingData.content, posted_by: user.id },
                 ]);
+                console.log('Sent');
                 return changeState('Success');
             }
             catch(err) {
+                console.log('Failed to send due to network error')
                 return changeState('Failed');
             }
+        } else {
+            return console.log('Could not send due to not being authenticated');
         }
     }
 
-    const ArticleShow = () => {
-        return (
-            <>
-            </>
-        )
-    }
+    // const ArticleShow = () => {
+    //     return (
+    //         <>
+    //         </>
+    //     )
+    // }
 
     return (
         <Box className={useStyle.root}>
@@ -117,7 +125,9 @@ const Dashboard = (props) => {
                             margin: '10px',
                             fontSize: '1.4rem',
                         }}>Title: </Typography>
-                        <TextField variant='outlined' className={useStyle.textField} label='Required*' />
+                        <TextField variant='outlined' required className={useStyle.textField} label='Required' onChange={(elem)=>{
+                            changeData({title: elem.target.value, content: postingData.content});
+                        }}/>
                     </Box>
                     <Box container component='div' className={useStyle.textDiv} style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                         <Typography component='label' style={{
@@ -133,7 +143,10 @@ const Dashboard = (props) => {
                                 <CKEditor
                                     editor={ ClassicEditor }
                                     onChange={ ( event, editor ) => {
-                                        changeData(editor.getData());
+                                        changeData({
+                                            title: postingData.title, 
+                                            content: editor.getData()
+                                        });
                                     } }
                                 />
                             </Box>
@@ -141,13 +154,18 @@ const Dashboard = (props) => {
                     </Box>
                 </Box>
                     <Button style={{margin: '20px'}} endIcon={<SendIcon />} variant='contained' color='primary'
-                        // onClick={}
+                        onClick={()=> {
+                            console.log(`Post Title: ${postingData.title}, Post content:${postingData.content}`);
+                            // if (postingData.title === '' || postingData.content === "") {
+                            // }
+                            sendPosts();
+                        }}
                     >Post Article</Button>
             </Box>
-            <Box component='section' className={useStyle.prevPost}>
+            {/* <Box component='section' className={useStyle.prevPost}>
                 <Typography variant='h4' className={useStyle.recentTitle} style={{borderBottom: '1px solid #00000026', margin: '30px', padding: '10px', width:'80%'}}>Your Recent Articles Posted</Typography>
                 <ArticleShow />
-            </Box>
+            </Box> */}
         </Box>
     );
 }

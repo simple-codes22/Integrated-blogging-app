@@ -12,8 +12,6 @@ const HomeStyles = makeStyles(theme => ({
         // flexDirection: 'column',
         position: "relative",
         minHeight: '100vh',
-        // flexDirection: 'column'
-        // alignItems: 'center',
     },
     Posts: {
         width: '600px',
@@ -66,6 +64,10 @@ const HomeStyles = makeStyles(theme => ({
 const Home = (props) => {
     /* HomePage Component */
     const [posts, updatePosts] = useState([]) // Posts Hook
+    const [numFix, numChange] = useState({
+        numStart: 0,
+        numEnd: 8,
+    })
     const useStyle = HomeStyles();
     // console.log('Home: ', supabase.auth.user());
     useEffect(() => {
@@ -76,13 +78,12 @@ const Home = (props) => {
     const getPosts = async () => {
         /* This functions fetches all the posts from the supabase backend */
         try {
-            const response = await supabase.from('posts').select('*, blogger_profiles(username, avatar_url)').range(0, 8); // Queries the posts and the author (foreign key)
+            const response = await supabase.from('posts').select('*, blogger_profiles(username, avatar_url)').order('updated_at', { ascending: false }).range(numFix.numStart, numFix.numEnd); // Queries the posts and the author (foreign key)
             return updatePosts(response.data);
         } catch (err) {
             return updatePosts({'state': 'failed'});
         }
     };
-
     const ProgressiveLoad = () => {
         return (
             <Box container component='div' className={useStyle.progressive}>
@@ -126,9 +127,15 @@ const Home = (props) => {
                     transition: 'all .5s ease-in-out'
                 }} onClick={() => {
                     console.log('Another loaded post');
+                    numChange({
+                        numStart: numFix.numStart,
+                        numEnd: numFix.numEnd + 8,
+                    });
+                    getPosts();
+                    return;
                 }}>
-                    See More Posts
-                </Button>
+                    See More Posts 
+                </Button> 
                 </Box>
                 )
             }
