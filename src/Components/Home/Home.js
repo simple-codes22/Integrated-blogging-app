@@ -75,6 +75,7 @@ const Home = (props) => {
         getPosts();
     }, [props.id]);
 
+
     const getPosts = async () => {
         /* This functions fetches all the posts from the supabase backend */
         try {
@@ -84,6 +85,7 @@ const Home = (props) => {
             return updatePosts({'state': 'failed'});
         }
     };
+
     const ProgressiveLoad = () => {
         return (
             <Box container component='div' className={useStyle.progressive}>
@@ -93,8 +95,18 @@ const Home = (props) => {
         )
     }
 
+    const loadMorePosts = () => {
+        console.log('Another loaded post');
+        numChange({
+            numStart: numFix.numStart,
+            numEnd: numFix.numEnd + 8,
+        });
+        getPosts();
+        return console.log('Post Loaded');
+    }
+
     const ShowMain = () => {
-        console.log(supabase.auth.user());
+        console.log("From ShowMain: ", supabase.auth.user());
         if (posts.length !== 0) {
             if (posts.state === 'failed') {
                 return (
@@ -125,15 +137,7 @@ const Home = (props) => {
                     width: '80%',
                     color: '#557be4',
                     transition: 'all .5s ease-in-out'
-                }} onClick={() => {
-                    console.log('Another loaded post');
-                    numChange({
-                        numStart: numFix.numStart,
-                        numEnd: numFix.numEnd + 8,
-                    });
-                    getPosts();
-                    return;
-                }}>
+                }} onClick={loadMorePosts}>
                     See More Posts 
                 </Button> 
                 </Box>
@@ -143,11 +147,12 @@ const Home = (props) => {
         else {
             return (
                 <ProgressiveLoad />
-            )
-        }
+                )
+            }
             // {/* <Button>Click to load older posts</Button> */}
     };
-
+    // useEffect(ShowMain, [getPosts]);
+    
     return (
         <Box component='div' className={useStyle.root}>
             <ShowMain />

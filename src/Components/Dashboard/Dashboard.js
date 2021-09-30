@@ -100,7 +100,7 @@ const Dashboard = (props) => {
                 return changeState('Success');
             }
             catch(err) {
-                console.log('Failed to send due to network error')
+                console.log('Failed to send due to network error');
                 return changeState('Failed');
             }
         } else {
@@ -108,7 +108,7 @@ const Dashboard = (props) => {
         }
     }
 
-    // const ArticleShow = () => {
+    // const ArticleShow = () => {      // Another project coming soon
     //     return (
     //         <>
     //         </>

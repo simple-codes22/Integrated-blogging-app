@@ -57,16 +57,23 @@ const Navigation = (props) => {
     /* useEffect hook 👇👇 to change auth-nav-bar based on the auth query */
     useEffect(() => {
         if (supabase.auth.user() !== null) {
-            setAuth(supabase.auth.user());
+            setAuth(supabase.auth.user()); // Adds the user auth details to the Auth Context which could be accessed globally
             console.log(checkAuth);
+            GetUserDetails();
             IfAuthenticated();
         } else {
             setDetails('Error');
             console.log('Not still authenticated');
             IfAuthenticated();
         }
-
     }, [props.id])
+
+    const GetUserDetails = async () => {
+        const details = await supabase.from('blogger_profiles')
+            .select('*')
+            .is('blogger_id', checkAuth.id);
+        return setDetails(details.data);
+    }
 
     const [checkAuth, setAuth] = useContext(AuthContext); // Gets the user info from the Auth Context
     const [userDetails, setDetails] = useState([]);
@@ -81,12 +88,30 @@ const Navigation = (props) => {
         )
     }
     
+    const CheckStart = () => {
+        if (userDetails !== null) {
+            console.log('User Details: ', userDetails.username)
+            return (
+                <Link to='/dashboard' className={useStyle.mainLinks}>
+                    <Avatar children={userDetails.username}></Avatar>
+                </Link>
+            )
+        } else {
+            return (
+                <Link to='/dashboard' className={useStyle.mainLinks}>
+                    <Avatar>S</Avatar>
+                </Link>
+            )
+        }
+    }
+
     const AuthBar = () => {
         // This is rendered when the user is authenticated
         return (
             <Box className={useStyle.AuthLinks}>
-                {/* <Link to='/dashboard'><Avatar children={userDetails['username'].split('')[0]} /></Link> */}
-                <Link to='/dashboard' className={useStyle.mainLinks}><Avatar>S</Avatar></Link>
+                {/* { userDetails !== null ? <Link to='/dashboard' className={useStyle.mainLinks}><Avatar children={userDetails.username.split('')[0]}></Avatar></Link> : <Link to='/dashboard' className={useStyle.mainLinks}><Avatar>A</Avatar></Link>}} */}
+                {/* <Link to='/dashboard' className={useStyle.mainLinks}><Avatar>S</Avatar></Link> */}
+                <CheckStart />
                 <a href='/' onClick={async () => {
                     await supabase.auth.signOut();
                     return console.log('Logged Out');
@@ -118,8 +143,7 @@ const Navigation = (props) => {
                 <Toolbar className={useStyle.linkBar}>
                     <Link to='/' className={useStyle.blogLogo}>Blog</Link>
                     <Box component='div' className={useStyle.blogList}>
-                        {/* {checkAuth !== null ? <AuthBar />: <NotAuthBar />} */}
-                        <IfAuthenticated />
+                        {/* <IfAuthenticated /> */}
                     </Box>
                 </Toolbar>
             </AppBar>
