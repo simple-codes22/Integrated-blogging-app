@@ -1,5 +1,5 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import { GitHub, Facebook, Twitter, Telegram } from '@material-ui/icons';
+import { GitHub, Facebook, Twitter, LinkedIn } from '@material-ui/icons';
 // import { BrowserRouter, Link } from 'react-router-dom';
 
 const footerStyle = makeStyles(theme => ({
@@ -41,8 +41,8 @@ const Footer = () => {
             <Box container component='div' className={useStyle.iconNavs}>
                 <a href="https://github.com/simple-codes22"><GitHub /></a>
                 <a href="https://facebook.com/"><Facebook /></a>
-                <a href="https://twitter.com/"><Twitter /></a>
-                <a href="https://telegram.com/"><Telegram /></a>
+                <a href="https://twitter.com/simple-codes22"><Twitter /></a>
+                <a href="https://linkedin.com/in/simple-codes22"><LinkedIn /></a>
             </Box>
             <Box component='div' title='Production Made In 2021' className={useStyle.current}>@2021</Box>
         </Box>
