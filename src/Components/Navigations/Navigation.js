@@ -1,4 +1,5 @@
 import { makeStyles, Button, Toolbar, AppBar, Avatar, Box } from "@material-ui/core"; // File Components from Material UI core
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../Contexts/authContext";
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
@@ -46,6 +47,11 @@ const navStyle = makeStyles(theme => ({ // Total navigation Styling
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    dashboard: {
+        '&:hover svg': {
+            fill: '#1779d4'
+        }
     }
 }))
 
@@ -87,31 +93,12 @@ const Navigation = (props) => {
             </>
         )
     }
-    
-    const CheckStart = () => {
-        if (userDetails !== null) {
-            console.log('User Details: ', userDetails.username)
-            return (
-                <Link to='/dashboard' className={useStyle.mainLinks}>
-                    <Avatar children={userDetails.username}></Avatar>
-                </Link>
-            )
-        } else {
-            return (
-                <Link to='/dashboard' className={useStyle.mainLinks}>
-                    <Avatar>S</Avatar>
-                </Link>
-            )
-        }
-    }
 
     const AuthBar = () => {
         // This is rendered when the user is authenticated
         return (
             <Box className={useStyle.AuthLinks}>
-                {/* { userDetails !== null ? <Link to='/dashboard' className={useStyle.mainLinks}><Avatar children={userDetails.username.split('')[0]}></Avatar></Link> : <Link to='/dashboard' className={useStyle.mainLinks}><Avatar>A</Avatar></Link>}} */}
-                {/* <Link to='/dashboard' className={useStyle.mainLinks}><Avatar>S</Avatar></Link> */}
-                <CheckStart />
+                <Link to='/dashboard' className={useStyle.mainLinks}><Button className={useStyle.dashboard} variant='text' startIcon={<DashboardIcon />}>My Dashboard</Button></Link>
                 <a href='/' onClick={async () => {
                     await supabase.auth.signOut();
                     return console.log('Logged Out');
@@ -143,7 +130,7 @@ const Navigation = (props) => {
                 <Toolbar className={useStyle.linkBar}>
                     <Link to='/' className={useStyle.blogLogo}>Blog</Link>
                     <Box component='div' className={useStyle.blogList}>
-                        {/* <IfAuthenticated /> */}
+                        <IfAuthenticated />
                     </Box>
                 </Toolbar>
             </AppBar>
