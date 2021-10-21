@@ -59,13 +59,21 @@ const navStyle = makeStyles(theme => ({ // Total navigation Styling
 const Navigation = (props) => {
     /* Main Navigation component which will be updated if user is authenticated or not */
     const useStyle = navStyle();
-    
+
+    const getDetails = () => {
+        if (checkAuth) {
+            GetUserDetails();
+        } else {
+            setTimeout(getDetails, 1000);
+        }
+    }
+
     /* useEffect hook 👇👇 to change auth-nav-bar based on the auth query */
     useEffect(() => {
         if (supabase.auth.user() !== null) {
             setAuth(supabase.auth.user()); // Adds the user auth details to the Auth Context which could be accessed globally
             console.log(checkAuth);
-            GetUserDetails();
+            getDetails();
             IfAuthenticated();
         } else {
             setDetails('Error');
@@ -98,7 +106,11 @@ const Navigation = (props) => {
         // This is rendered when the user is authenticated
         return (
             <Box className={useStyle.AuthLinks}>
-                <Link to='/dashboard' className={useStyle.mainLinks}><Button className={useStyle.dashboard} variant='text' startIcon={<DashboardIcon />}>My Dashboard</Button></Link>
+                <Link to='/dashboard' className={useStyle.mainLinks}>
+                    <Button className={useStyle.dashboard} variant='text' startIcon={<DashboardIcon />}>
+                        My Dashboard
+                    </Button>
+                </Link>
                 <a href='/' onClick={async () => {
                     await supabase.auth.signOut();
                     return console.log('Logged Out');

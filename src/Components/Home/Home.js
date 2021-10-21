@@ -137,8 +137,8 @@ const Home = (props) => {
                     width: '80%',
                     color: '#557be4',
                     transition: 'all .5s ease-in-out'
-                }} onClick={loadMorePosts}>
-                    See More Posts 
+                }} onClick={() => {loadMorePosts()} }> {/* Coming back for you 👈👈 */}
+                    See More Posts
                 </Button> 
                 </Box>
                 )
